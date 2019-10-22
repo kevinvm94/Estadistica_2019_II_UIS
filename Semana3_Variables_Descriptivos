@@ -1,0 +1,292 @@
+#Practica_2
+##Variables_y_frecuencias
+
+data()
+data(package = .packages(all.available = TRUE))
+#Lista_de_paquetes_preinstalados
+
+library(ape)
+library(permute)
+library(vegan)
+#Librerias_a_usar
+
+#Estadistica=Es una disciplina de la matemática que permite obtener, ordenar, analizar y sacar conclusiones de comportamientos o fenómenos observables en la naturaleza. Este campo de las ciencias se puede dividir en 3 tipos: Descriptiva, Inferencial y Probabilistica.
+###Tipos_de_variables
+###Cualitativas=Nominal, ordinaria, binaria
+###Cuantitativas=Discreta, Continua
+
+#$=selecciona un objeto en especifico de la lista
+
+install.packages("ape")
+library(ape)
+install.packages("permute")
+library(permute)
+install.packages("vegan")
+library(vegan)
+install.packages("ade4")
+library(ade4)
+install.packages("geiger")
+library("geiger")
+
+#Paquete ape
+data(carnivora)
+help(carnivora)
+carnivora$FW
+#Paquete permute
+data(jackal)
+#Paquete vegan
+data(jackal)
+data(BCI)
+class(BIC)
+data(mite.env)
+#Paquete ade4
+data(atlas)
+data(carniherbi49)
+data(corvus)
+data(tortues)
+tortues
+#Paquete geiger
+data(geospiza)
+str("geospiza")
+help("geospiza")
+geospiza$geospiza.data
+#geospiza$geospiza.data[fila, columna]
+geospiza$geospiza.data[,1]
+
+# Semilla
+set.seed(1)
+#sexos
+sex <- c('F', 'M')
+sex
+
+# Inventemos una muestra con las mismas probabilidades de sacar un Macho o una Hembra
+pop1 <- sample(x = sex, size = 50,replace = T,prob = c(0.5,0.5))
+pop1 
+
+# imaginemos que pop1 es real y queremos saber cuál es la razón de sexos en la muestra
+M <- length(which(pop1 == 'M'))
+M
+
+F <- length(which(pop1 == 'F'))
+F
+
+# la razón es
+paste(F,'/',M,sep = '')
+
+#Qué pasaría si en el sitio encontráramos más hembras qué machos.
+
+# Semilla
+set.seed(1)
+#sexos
+sex <- c('F', 'M')
+sex
+
+# Inventemos una muestra con las mismas probabilidades de sacar un Macho o una Hembra
+
+pop2 <- sample(x = sex, size = 50,replace = T,prob = c(0.8,0.2))
+pop2
+
+# imaginemos que pop1 es real y queremos saber cuál es la razón de sexos en la muestra
+
+M <- length(which(pop1 == 'M'))
+M
+
+F <- length(which(pop1 == 'F'))
+F
+
+# la razón es
+paste(F,'/',M,sep = '')
+
+#Ejercicio_1
+#usando el data.frame tortues calcule la proporción de hembras y machos de la muestra
+
+tortues
+MT=length(which(tortues=='M'))
+MT  
+
+FT=length(which(tortues=='F'))
+FT
+
+# Imaginemos que tomamos medidas de cráneos de lagarto
+
+Ancho<-rnorm(n = 32,mean = 10,sd = 1)
+Ancho
+
+Largo <- rnorm(n = 32,mean = 15,sd = 1)
+Largo
+
+# Construimos la tabla con medidas imaginarias
+medidas<-cbind(Ancho, Largo)
+medidas
+
+Tabla_medidas <- as.data.frame(cbind(paste('spp',1:32,sep = '_'),medidas))
+# tabla sin colnames
+Tabla_medidas
+
+# asigne nombres a las columnas
+colnames(Tabla_medidas) <- c('Individuos', 'Ancho','Largo')
+Tabla_medidas
+
+# Relación ancho/largo
+prp <- Ancho/Largo
+prp 
+
+Tabla_medidas_prp <- cbind.data.frame(Tabla_medidas, prp)
+Tabla_medidas_prp 
+
+#Ejercicio_2
+#usando el data.frame tortues calcule la proporción entre el ancho y el largo del caparazón, genere una tabla con la información de tortues y la nueva variable derivada.
+
+ancho.t=rnorm(tortues$long)
+ancho.t
+
+largo.t=rnorm(tortues$larg)
+largo.t
+
+medidas.t=cbind(ancho.t,largo.t)
+medidas.t
+
+colnames(medidas.t) <- c('Ancho','Largo')
+medidas.t
+
+tabla_medidas_t <- as.data.frame(cbind(paste('spp',1:48,sep = '_'),medidas.t))
+tabla_medidas_t
+
+prp.t=ancho.t/largo.t
+prp.t 
+
+tabla_medidas_prp_t<- cbind.data.frame(tabla_medidas_t, prp.t)
+tabla_medidas_prp_t 
+
+
+#Tablas
+#Una herramienta útil para ver la frecuencia o el conteo de una variable es la función table; adicionalmente, podemos obtener la fracción de cada objeto con relación al total del muestreo
+
+# Conteo o frecuencia
+freq<-table(mite.env$Substrate)
+freq
+
+# Fracción
+prop.table(freq)
+
+# Las proporciones pueden  ser visualizadas usando la función *pie*
+pie(prop.table(freq))
+
+#Ejercicio_3
+#¿Cuántas especies de Corvus fueron muestreadas en la región Paleártica-Africana? Use el data.frame del género Corvus. ¿Qué porcentaje de Corvus muestreados habitan zonas abiertas
+
+data.frame(corvus)
+corvus_paleo=length(which(corvus=='pale'))
+corvus_paleo
+
+corvus_habit_open=table(corvus$habitat)
+corvus_habit_open
+
+corvus_percent_habitat=prop.table(corvus_habit_open)
+corvus_percent_habitat
+pie(corvus_percent_habitat)
+
+#Distribución de frecuencias
+#La distribución de frecuencias  es el sumatorio de las ocurrencias de los datos clasificados en categorías no solapadas. Cuando las variables son categóricas podemos graficar barras que permitan ver la frecuencia de cada objeto.
+
+freq
+mite.env$Substrate
+# Gráficar las frecuencias de cada sustrato
+plot(freq)
+
+#Ejercicio_4
+#¿Cómo luce el gráfico de frecuencias para los tipos de hábitat del género Corvus?
+
+freq.corvus=table(corvus$habitat)
+freq.corvus
+plot(freq.corvus)
+
+#Pero si las variables son cuantitativas, los valores deben ser dispuestos en rangos que permitan observar el comportamiento de las frecuencias. Primero, debemos generar una tabla de frecuencias
+
+# Sumar las ocurrencias de cada especie
+atlas$birds
+
+xsp<- apply(atlas$birds,2,sum)
+# Preguntar cuál es el mínimo 
+min(xsp)
+which.min(xsp)
+# podríamos generar vectores
+min(xsp)
+x <- which.min(xsp)
+xsp[x]
+
+#Ejercicio_5
+#Encuentre el máximo, así como lo hizo para el mínimo. Preguntar cuál es el el máximo
+max(xsp)
+which.max(xsp)
+xsp [which.max(xsp)]
+plot(as.table(xsp))
+
+#Cuando hablamos de variables de medida como longitud ancho etc, podemos hacer lo mismo pero organizando los valores en rangos.
+
+# Longitud de las tortugas
+tortues$long
+# no tendría sentido, debemos organizar en rangos
+table(tortues$long)
+# Preguntar cuál es el mínimo 
+min(tortues$long)
+# Preguntar cuál es el máximo
+max(tortues$long)
+# La función rangos nos permite ver directamente el rango
+range(tortues$long)
+#Dado que el máximo es 177 y el mínimo es 93, Podríamos decir que nuestra muestra estaría en un rango de 92.5 a 177.5, podemos crear una lista de rangos a partir de esta información
+
+# genere las cajas
+bins <- seq(92.5,182.5, 10)
+# Agrupe los datos en las cajas
+datos<- cut(tortues$long,bins)
+# genere la tabla de frecuencias
+freq_long<-table(datos)
+# Usamos transfrom para generar un data.frame de frecuencias
+transform(freq_long)
+
+# Podemos usarlo para adicionar más información a cada rango. Freq es una variable interna generada a partir de transform(freq_long)
+transform(freq_long, Relativ= prop.table(Freq), Acum= cumsum(Freq))
+
+#Para poder visualizar estos datos, nosotros podemos asignar el vector crudo a la función hist o utilizar los rangos generados anteriormente.
+
+# Histograma a partir de datos crudos
+hist(tortues$long)
+# Histograma definiendo las cajas 
+hist(tortues$long, breaks = bins, main = 'Longitudes de caparazón')
+
+#Ejercicio_6
+#Repita el ejercicio para las variables continuas de tamaño de pico y tamaño del ala en el género Corvus. Busque cómo cambiar colores, ejes y algunas propiedades que le permitan mejorar el diseño del histograma. 
+corvus
+corvus_ala=corvus$wing
+table(corvus_ala)
+min(corvus$wing)
+max(corvus$wing)
+range(corvus$wing)
+corvus_wings=bins <- seq(226.5,473.5, 10)
+corvus_wings
+datos_corvus_wings=cut(corvus$wing,corvus_wings)
+datos_corvus_wings
+freq_corvus_wings=table(datos_corvus_wings)
+freq_corvus_wings
+transform(freq_corvus_wings)
+transform(freq_corvus_wings, Relativ= prop.table(Freq), Acum= cumsum(Freq))
+hist(corvus$wing)
+hist(freq_corvus_wings)
+#Todo el codigo anterior tambien se aplica para el pico cuyo nombre en la tabla es "bill" haciendole los correspondientes cambios!
+
+
+#Invente unos datos de medidas, como se hizo en el caso de los cráneos, y genere todo el ejercicio hasta el histograma. Busque otro tipo de distribuciones para generar las variables ejemplo. Busque en qué casos sirve cada distribución o para qué se usan.
+
+long.cuerpo=rnorm(n = 40,mean = 30,sd = 2)
+long.cuerpo
+table(long.cuerpo)
+range(long.cuerpo)
+long.cuerpo_2=bins=seq(24, 44, 10)
+long.cuerpo_2
+freq.long.cuerpo=table(long.cuerpo_2)
+freq.long.cuerpo
+transform(freq.long.cuerpo)
+hist(freq.long.cuerpo)
+
+#FIN
