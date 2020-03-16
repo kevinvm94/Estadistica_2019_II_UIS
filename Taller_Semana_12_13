@@ -1,0 +1,335 @@
+############## Taller Normalidad y otros test #########
+
+#### Matriz Morphological data
+
+data<-read.csv("File/Morphological_data.csv")
+View(data)
+head(data)
+
+### variables categóricas: País y Género
+#### Variable numéricas : BL, WB
+
+str(data)
+data$COUNTRY <-  as.factor(data$COUNTRY)
+data$GENDER <-  as.factor(data$GENDER)
+
+##### Variable 1: BL 
+
+#### Mediante gráficas 
+
+ggplot(data)+
+  geom_bar(aes(x=BL, fill=COUNTRY))+
+  facet_wrap(~GENDER)
+#### Gráficamente la distrifución de BL por países y entre géneros muestra sesgos entre medidas.
+
+### Para evidenciar el ajuste que debería tener cada factor se calculará la curva teórica por géneros para la variable BL
+
+DataBLF <- data[which(data$GENDER == 'F'),]
+
+ggplot(data = DataBLF, aes(x=BL)) +
+  geom_histogram(aes(y = ..density.., fill = ..count..)) +
+  scale_fill_gradient(low = "#DCDCDC", high = "#7C7C7C") +
+  stat_function(fun = dnorm, colour = "firebrick",
+                args = list(mean = mean(DataBL$BL),
+                            sd = sd(DataBL$BL))) +
+  ggtitle("Histograma BL + curva normal teórica") +
+  theme_bw()
+
+DataBLM <- data[which(data$GENDER == 'M'),]
+
+ggplot(data = DataBLM, aes(x=BL)) +
+  geom_histogram(aes(y = ..density.., fill = ..count..)) +
+  scale_fill_gradient(low = "#DCDCDC", high = "#7C7C7C") +
+  stat_function(fun = dnorm, colour = "firebrick",
+                args = list(mean = mean(DataBL$BL),
+                            sd = sd(DataBL$BL))) +
+  ggtitle("Histograma BL + curva normal teórica") +
+  theme_bw()
+
+### En ambas disribuciones se puede apreciar los segos y posibles datos atípicos en las colas.
+
+### Usando la técnica de QQplot
+
+ggplot(data, aes(sample = BL, colour = GENDER)) +
+  stat_qq() +
+  stat_qq_line()
+
+### Test de normalidad 
+
+skewness(data$BL,na.rm = T)
+### -0.2148097
+kurtosis(data$BL,na.rm = T)
+### 3.128146 ### Leptokurtica 
+
+##### Test de Shapiro.wilk
+
+shapiro.test(x = data$BL)
+##### data:  data$BL W = 0.99543, p-value = 0.03856 
+## Se rechaza la ho, corroborando que los datos no vienen de una población normal
+
+### Como las observaciones sobrepasan las 50, se aconseja usar la modificación de Lillie-fors al test Kolmogorov-Smirnov
+
+lillie.test(x = data$BL)
+####data:  data$BL D = 0.028572, p-value = 0.1847
+
+### Test de homocedasticidad 
+
+ggplot(data = data, aes(x = GENDER, y = BL, colour = COUNTRY)) +
+  geom_boxplot() +
+  geom_point() +
+  theme_bw() +
+  theme(legend.position = "none")
+
+aggregate(BL~GENDER, data = data, FUN = var)
+
+########## debido a las características de los datos se decidió usar un test de Levenne 
+
+leveneTest(data$BL ~ data$GENDER)
+#### Levene's Test for Homogeneity of Variance (center = median) Df F value Pr(>F) group   1  0.1289 0.7197 691  
+#### Se acepta la Ho, por lo tanto ambas variables con homocedásticas entre si. Por lo tanto podría usarse un ANOVA de una vía para hacer las comparaciones entre grupos.
+
+
+#### Transformaciones 
+### Teniendo en cuenta que la variable no es normal, se usará el test de tukey para evaluar que tipo de transformación es la más adecuada para nuestros datos 
+T_tuk =  transformTukey(data$BL)
+
+### Según los resultados del test se recomienda un transformación X^lambda 
+## lambda     W Shapiro.p.value 
+## 477    1.9 0.998          0.5772
+
+lambda<- 1.9
+
+Bltrans<- data$BL^lambda
+
+```
+####### Test de hipótesis 
+
+####### Se quieren observar si hay diferencias entre géneros para la variable BL, con los datos transformados y normalizados es posible realizar un test de ANOVA
+
+anovBL <- aov(Bltrans ~ data$GENDER)
+summary(anovBL)
+
+
+### El resultado del test nos dice que si hay diferencias entre los géneros dado BL, 
+
+### Test de post-hoc
+
+##Debido a que se transformó la variable es posible usa Tukey para ver las diferencias entre los grupos ya que se cumplen todos los supuestos que Tukey necesita 
+
+TukeyHSD(anovBL)
+
+### Cómo solo se estan usando dos grupos, no es necesario aplicar este test 
+
+##### Variable 2: WB
+
+#### Mediante gráficas 
+
+ggplot(data)+
+  geom_bar(aes(x=WB, fill=GENDER))+
+  facet_wrap(~COUNTRY)
+#### Gráficamente la distrifución de  por países y entre géneros muestra sesgos entre medidas.
+
+### Para evidenciar el ajuste que debería tener cada factor se calculará la curva teórica por géneros para la variable BL
+
+DataWBF <- data[which(data$GENDER == 'F'),]
+
+ggplot(data = DataWBF, aes(x=WB)) +
+  geom_histogram(aes(y = ..density.., fill = ..count..)) +
+  scale_fill_gradient(low = "#DCDCDC", high = "#7C7C7C") +
+  stat_function(fun = dnorm, colour = "firebrick",
+                args = list(mean = mean(DataWBF$WB),
+                            sd = sd(DataWBF$WB))) +
+  ggtitle("Histograma BL + curva normal teórica") +
+  theme_bw()
+
+DataWBM <- data[which(data$GENDER == 'M'),]
+
+ggplot(data = DataWBM, aes(x=WB)) +
+  geom_histogram(aes(y = ..density.., fill = ..count..)) +
+  scale_fill_gradient(low = "#DCDCDC", high = "#7C7C7C") +
+  stat_function(fun = dnorm, colour = "firebrick",
+                args = list(mean = mean(DataWBM$WB),
+                            sd = sd(DataWBM$WB))) +
+  ggtitle("Histograma BL + curva normal teórica") +
+  theme_bw()
+
+### En ambas disribuciones se puede apreciar los segos y posibles datos atípicos en las colas.
+
+### Usando la técnica de QQplot
+
+ggplot(data, aes(sample = WB, colour = COUNTRY)) +
+  stat_qq() +
+  stat_qq_line()
+
+### Test de normalidad 
+
+skewness(data$WB,na.rm = T)
+### -0.3139955
+kurtosis(data$WB,na.rm = T)
+###  3.360989 ### Leptokurtica 
+
+
+
+### Como las observaciones sobrepasan las 50, se aconseja usar la modificación de Lillie-fors al test Kolmogorov-Smirnov
+
+lillie.test(x = data$WB)
+### data:  data$WB D = 0.032138, p-value = 0.08625
+
+### Test de homocedasticidad 
+
+ggplot(data = data, aes(x = COUNTRY, y = WB, colour = GENDER)) +
+  geom_boxplot() +
+  geom_point() +
+  theme_bw() +
+  theme(legend.position = "none")
+
+aggregate(WB~COUNTRY, data = data, FUN = var)
+
+########## debido a las características de los datos se decidió usar un test de Levenne 
+
+leveneTest(data$WB ~ data$COUNTRY)
+ 
+#### Se acepta la Ho, por lo tanto ambas variables con homocedásticas entre si. Por lo tanto podría usarse un ANOVA de una vía para hacer las comparaciones entre grupos.
+
+
+#### Transformaciones 
+### Teniendo en cuenta que la variable no es normal, se usará el test de tukey para evaluar que tipo de transformación es la más adecuada para nuestros datos 
+T_tuk =  transformTukey(data$WB)
+
+### Según los resultados del test se recomienda un transformación X^lambda 
+
+
+lambda<- 1.625
+
+WBtrans<- data$WB^lambda
+
+```
+####### Test de hipótesis 
+
+####### Se quieren observar si hay diferencias entre los países para la variable WB, con los datos transformados y normalizados es posible realizar un test de ANOVA
+
+anovWB <- aov(WBtrans ~ data$COUNTRY)
+summary(anovBL)
+
+
+### El resultado del test nos dice que si hay diferencias entre los países dado WB, 
+
+### Test de post-hoc
+
+##Debido a que se transformó la variable es posible usa Tukey para ver las diferencias entre los grupos ya que se cumplen todos los supuestos que Tukey necesita 
+
+TukeyHSD(anovWB)
+
+#EJER: Lea el archivo Morphological_data.csv. Genere una subtabla con solo las muestras de México. Tome una variable cuantitativa y evalue normalidad.
+
+install.packages("readr")
+library("readr")
+
+getwd()
+setwd("C:/Users/kevin/Desktop/")  
+
+tarea=read_csv("Morphological_data.csv")
+tarea
+View(tarea)
+
+mex=tarea[which (tarea$COUNTRY == "mx"),]
+View(mex)
+
+mex$DB
+
+mex$WLLP
+
+t1=lillie.test(x=mex$DB) #Muestras mayores a 50
+t1
+t2=lillie.test(x=mex$WLLP)
+t2
+View(t1)
+View(t2)
+
+#Valor P=1.628353e-05 para t1
+#Valor P=0.124626 para t2
+#
+#
+#
+#
+#Transformación.
+t_tuk_t1=transformTukey(mex$DB)
+#Resultado
+#  lambda      W Shapiro.p.value
+#397   -0.1 0.9921        0.006353
+
+#if (lambda >  0){TRANS = x ^ lambda} 
+#if (lambda == 0){TRANS = log(x)} 
+#if (lambda <  0){TRANS = -1 * x ^ lambda} 
+t_tuk_t2=transformTukey(mex$WLLP)
+#Resultado
+#lambda      W Shapiro.p.value
+#551   3.75 0.9867       8.985e-05
+
+#if (lambda >  0){TRANS = x ^ lambda} 
+#if (lambda == 0){TRANS = log(x)} 
+#if (lambda <  0){TRANS = -1 * x ^ lambda} ###### SEMANA 12 Y 13 EJERCICIOS ###############
+
+
+if(!require(ape)){install.packages("ape")}
+if(!require(ggplot2)){install.packages("ggplot2")}
+if(!require(ggridges)){install.packages("ggridges")}
+if(!require(plyr)){install.packages("plyr")}
+if(!require(Rmisc)){install.packages("Rmisc")}
+if(!require(dplyr)){install.packages("dplyr")}
+if(!require(biotools)){install.packages("biotools")}
+if(!require(moments)){install.packages("moments")}
+if(!require(nortest)){install.packages("nortest")}
+if(!require(rcompanion)){install.packages("rcompanion")}
+if(!require(car)){install.packages("car")}
+if(!require(HardyWeinberg)){install.packages("HardyWeinberg")}
+
+#EJER: Lea el archivo Morphological_data.csv. Genere una subtabla con solo las muestras de México. Tome una variable cuantitativa y evalue normalidad.
+
+install.packages("readr")
+library("readr")
+
+getwd()
+setwd("C:/Users/kevin/Desktop/")  
+
+tarea=read_csv("Morphological_data.csv")
+tarea
+View(tarea)
+
+mex=tarea[which (tarea$COUNTRY == "mx"),]
+View(mex)
+
+mex$DB
+
+mex$WLLP
+
+t1=lillie.test(x=mex$DB) #Muestras mayores a 50
+t1
+t2=lillie.test(x=mex$WLLP)
+t2
+View(t1)
+View(t2)
+
+#Valor P=1.628353e-05 para t1
+#Valor P=0.124626 para t2
+#
+#
+#
+#
+#Transformación.
+t_tuk_t1=transformTukey(mex$DB)
+#Resultado
+#  lambda      W Shapiro.p.value
+#397   -0.1 0.9921        0.006353
+
+#if (lambda >  0){TRANS = x ^ lambda} 
+#if (lambda == 0){TRANS = log(x)} 
+#if (lambda <  0){TRANS = -1 * x ^ lambda} 
+t_tuk_t2=transformTukey(mex$WLLP)
+#Resultado
+#lambda      W Shapiro.p.value
+#551   3.75 0.9867       8.985e-05
+
+#if (lambda >  0){TRANS = x ^ lambda} 
+#if (lambda == 0){TRANS = log(x)} 
+#if (lambda <  0){TRANS = -1 * x ^ lambda} v
