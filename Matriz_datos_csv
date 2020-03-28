@@ -1,0 +1,37 @@
+Muestreo,Mes,Temporada ,Zona,Altitud, Ambiental,Agua,Caudal ,H',D
+1,Abril,Aguas bajas,Cabecera,1600,24.6,19.8,11.9,1.505,0.2577
+1,Abril,Aguas bajas,Media,320,29.7,21.9,15.5,0.8152,0.5698
+1,Abril,Aguas bajas,Desembocadura,80,34.3,28.3,21.3,1.174,0.3718
+2,Mayo,Aguas bajas,Cabecera,1600,23.3,16.9,12.4,1.348,0.3663
+2,Mayo,Aguas bajas,Media,320,27.1,19.2,15.9,1.493,0.2731
+2,Mayo,Aguas bajas,Desembocadura,80,32.1,25.7,21.1,1.593,0.2597
+3,Junio,Aguas bajas,Cabecera,1600,26.6,20.5,11.1,1.257,0.3503
+3,Junio,Aguas bajas,Media,320,28.7,22.8,14.9,1.287,0.357
+3,Junio,Aguas bajas,Desembocadura,80,35.1,27.7,22.1,1.16,0.4178
+4,Julio,Aguas bajas,Cabecera,1600,25.1,20.5,11.5,1.087,0.3895
+4,Julio,Aguas bajas,Media,320,28.4,22.8,14.7,1.321,0.4075
+4,Julio,Aguas bajas,Desembocadura,80,34.8,27.7,22.1,1.099,1.4174
+5,Agosto,Aguas en ascenso,Cabecera,1600,23.1,16.5,13.1,1.277,0.3576
+5,Agosto,Aguas en ascenso,Media,320,29.2,22.7,16.7,0.7184,0.645
+5,Agosto,Aguas en ascenso,Desembocadura,80,35.3,29.9,23.1,0.9383,0.4929
+6,Septiembre,Aguas altas,Cabecera,1600,24.2,18.1,13.1,1.404,0.2871
+6,Septiembre,Aguas altas,Media,320,30.35,24.7,16.7,1.216,0.4042
+6,Septiembre,Aguas altas,Desembocadura,80,36.5,31.1,23.1,1.141,0.3973
+7,Octubre,Aguas altas,Cabecera,1600,23.1,16.8,14.9,1.26,0.3106
+7,Octubre,Aguas altas,Media,320,28.6,22.9,16.7,0.4348,0.8083
+7,Octubre,Aguas altas,Desembocadura,80,34.1,28.9,25.1,1.044,0.4283
+8,Noviembre,Aguas altas,Cabecera,1600,23.1,17.8,15.8,1.045,0.4871
+8,Noviembre,Aguas altas,Media,320,28.6,23.7,18.7,0.9839,0.4566
+8,Noviembre,Aguas altas,Desembocadura,80,34.1,28.9,26.3,0.9661,0.44
+9,Diciembre,Aguas bajas,Cabecera,1600,24.3,19.8,12.8,1.087,0.3731
+9,Diciembre,Aguas bajas,Media,320,27.7,21.9,15.1,1.292,0.3762
+9,Diciembre,Aguas bajas,Desembocadura,80,31.1,28.3,23.1,1.276,0.3137
+10,Enero,Aguas bajas,Cabecera,1600,23.1,19.5,12.4,1.195,0.328
+10,Enero,Aguas bajas,Media,320,27.65,22.4,15.9,1.091,0.4664
+10,Enero,Aguas bajas,Desembocadura,80,32.2,27.7,21.1,1.342,0.3146
+11,Febrero,Aguas bajas,Cabecera,1600,21.5,16.8,11.1,1.502,0.3045
+11,Febrero,Aguas bajas,Media,320,22.65,24.9,14.9,1.124,0.4383
+11,Febrero,Aguas bajas,Desembocadura,80,31.9,27.3,22.1,1.004,0.453
+12,Marzo,Aguas bajas,Cabecera,1600,23.8,19.7,11.5,0.9695,0.4936
+12,Marzo,Aguas bajas,Media,320,27.45,22.2,14.7,1.591,0.2493
+12,Marzo,Aguas bajas,Desembocadura,80,31.1,26.3,22.1,1.686,0.2158
